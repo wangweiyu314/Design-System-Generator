@@ -13,31 +13,78 @@ agent_created: true
 ## 0. 路径
 
 ```
-SPEC_ROOT = {{SPEC_ROOT}}
-NODE      = {{NODE}}
+SPEC_ROOT = 本包所在目录（即本文件 `SKILL.md` 的上一级）
+NODE      = 你机器上的 node（`which node`）
 ```
+
+> **刻意不写绝对路径。** 本包要能整体拷给同事、放在任何目录下都照常工作。
+> 包内脚本一律用 `path.join(__dirname, '..')` 自己定位包根，不依赖调用者的当前目录。
+>
+> ⚠ **写死绝对路径的后果不是「别人跑不了」，而是「跑的是另一份包」**——
+> 如果那个路径上恰好还有一份旧副本，校验器会打印「全部通过」，
+> 而它看的是旧那份。**假通过比报错难查**，输出里没有任何异常信号。
+> 交付前扫一遍：`grep -rl "/Users/\|C:\\\\" <包目录>`；
+> 剩下的应该只有**出处记录**（「这个值采自哪个仓库」），那是合法的历史事实。
 
 规范版本：**v0.1.0（初始化）**
 
 ## 1. 两条铁律
 
 1. **回源再动手**：任何颜色、字号、间距、圆角、阴影、组件尺寸，先查 `foundation/tokens.md`（取值唯一来源）与对应组件/页面文档，禁止凭记忆写数值。
-2. **模板起步，别从零写**：`scripts/` 下有已验证模板（清单与选型见 `scripts/README.md`），复制改造比手写更快也更不容易违规。
+2. **模板起步，别从零写**：`scripts/templates/<类别>/` 下是本系统**已沉淀**的模板（清单与选型见 `scripts/README.md`），复制改造比手写更快也更不容易违规。**该目录为空 = 本系统还没沉淀过模板**，按 `scripts/templates/README.md` 从设计稿搭，不要从别的系统抄。
+
+> **模板待沉淀 / 取值待填**：本包刚建好时 `scripts/layout/` 与 `scripts/templates/`
+> 下**只有契约骨架**，布局与内容区模板都要按本系统设计稿沉淀（见各自的 `README.md`）。
+> 沉淀出来的模板 `:root` 里若还是 `unset`，说明取值没回灌 —— 页面渲染是不正确的，
+> `check-tokens.js` 会以 `[E5] 取值待填` 报数、退出码非 0。这是设计出来的，不是故障。
+
+## 1.1 布局与内容区模板（本包自带与否）
+
+本包**不自带成品**：
+
+| 目录 | 建包时有什么 | 缺了怎么办 |
+| :-- | :-- | :-- |
+| `scripts/layout/` | 只有契约骨架 `_skeleton.html` 与说明 | 按本系统设计稿沉淀外壳，见 `scripts/layout/README.md` |
+| `scripts/templates/` | 只有契约骨架、`contract.json` 与说明 | 按本系统设计稿沉淀内容区模板，见 `scripts/templates/README.md` |
+
+**两者都不能从别的系统抄。** 布局是外壳，抄过来会带着别人没验证过的结构上线；
+内容区模板更隐蔽——它不只是结构，还带着一整套取值阶梯（间距档 / 色板 / 圆角档），
+抄过来会让本系统规范里凭空多出几十个看起来很像正经条目的 Token。
+
+- 该有哪几套外壳：看 `mine-tokens.js` 报告第 2 节「布局候选」
+- 该有哪几类内容区模板：看 `mine-tokens.js` 报告第 1 节「页面结构特征」
+- 已有项目里加页面、不需要外壳：`--layout=none`
+
+## 1.2 拿到需求，先判四件事
+
+拿到 PRD 或需求描述，不要直接动手写页面。先依次判四件事，每一件都有唯一答案来源：
+
+| # | 判什么 | 答案来源 |
+| :-- | :-- | :-- |
+| 1 | **判页面类型**：这个需求对应本系统的哪一类页面 | `scripts/templates/` 下已沉淀的类别（目录名即 `--type` 取值）+ `pages/` 结构规范 |
+| 2 | **判布局**：0→1 的新系统 → 出完整外壳；已有项目里加页面 → `--layout=none` 只出内容区，外壳沿用现有，不另起一套（见 §1.1） | `scripts/layout/` 已沉淀的外壳 |
+| 3 | **判内容区模板**：这类页面用哪个已沉淀模板；模板复制改造，不手工拼装 | `scripts/README.md` 选型决策树 |
+| 4 | **判浮层档位**：哪类浮层、取哪一档；宽度只能取契约档位，不允许自由写 | `scripts/templates/contract.json` 的 `overlay` |
+
+> 四件事判完，走 §2 生成骨架，再按「业务替换点」注释填业务字段。
+> 某一件判不出来（本包没沉淀对应模板 / 契约没声明档位）**不是障碍，是信号**：
+> 说明规范还没覆盖这个场景——先依据基础规范把页面搭起来，与使用者确认后按 §7 维护规则补进规范，不要绕开。
 
 ## 2. 一键生成（新建页面时的首选路径）
 
 ```bash
-cd {{WORKDIR}}
-$NODE {{PACKAGE}}/scripts/new-page.js --type=list --name=<页面名>
+cd "$SPEC_ROOT/.."    # 生成器按 --out 写文件，默认写在工作目录
+$NODE "$SPEC_ROOT/scripts/new-page.js" --type=list --name=<页面名>
 ```
 
 | 参数 | 取值 |
 | :-- | :-- |
-| `--type` | `list` / `form` / `detail` / `dashboard` / `login` / `modal` / `drawer`（必填）；后两者产出独立浮层演示页 |
-| `--name` | 页面名（必填） |
-| `--layout` | `dark-side`（默认）/ `side` / `none`（已有项目只生成内容区） |
-| `--tabs` | 附多标签导航 |
-| `--overlay` | 附带浮层骨架：`modal[:confirm\|form\|complex]` / `drawer[:detail\|form]` / `both` |
+| `--type` | 页面类别（必填）。取值 = `scripts/templates/` 下的**目录名**——本包有哪几类由本系统的设计稿裁决，不在这里列。`contract.json` 的 `types` 是**可选**白名单，留空则完全按目录名发现。属于浮层类别的（遮罩类名在 `contract.json` 的 `overlay` 里声明）产出可独立打开的浮层演示页。没沉淀过会报错并给沉淀步骤 |
+| `--name` | 页面名（必填）。填入 `<title>`、布局的 `@page-title` 与模板里的 `@@页面标题@@` |
+| `--layout` | 布局名 = `scripts/layout/` 下的文件名（不含 `.html`）。不写：只有一个布局时自动用、有多个则报错列出、一个都没有则给出沉淀步骤。`none` = 只要内容区 |
+| `--template` | 同一类别沉淀了多个模板时，指定用哪一个（不带 `.html`） |
+| `--tabs` | 附多标签导航（布局留了 `<!-- @tabs-slot -->` 才生效；需要本包沉淀过 `templates/tabs/`） |
+| `--overlay` | 附带浮层骨架，写法 `<类别>[:<档位>]`，如 `modal:form` / `drawer` / `both`。**类别、档位与组合别名都来自 `scripts/templates/contract.json`** |
 | `--no-trigger` | 不注入「演示入口」触发条 |
 | `--out` | 输出路径 |
 
@@ -46,22 +93,33 @@ $NODE {{PACKAGE}}/scripts/new-page.js --type=list --name=<页面名>
 ## 3. 交付前必跑
 
 ```bash
-$NODE {{PACKAGE}}/scripts/check-tokens.js {{WORKDIR}} --strict
+$NODE "$SPEC_ROOT/scripts/check-tokens.js" "$SPEC_ROOT" --strict
 ```
 
-退出码必须为 0。五项检查：E1 硬编码色值 / E2 取值漂移（规范→交付物）/ E3 未定义引用 / W1 规范未收编（交付物→规范）/ I1 规范未落地。
+退出码必须为 0。八项检查：E1 硬编码色值 / E2 取值漂移（规范→交付物）/ E3 未定义引用 /
+E4 框架约定（规则来自本包 `foundation/conventions.json`）/ E5 取值待填 /
+E6 亮色覆盖不全（声明了主题覆盖块却没覆盖全）/ W1 规范未收编（交付物→规范）/ I1 规范未落地。
+
+> **扫描根是「包本身」，不是它的上一级。** 取上一级会在两种情形下出错：
+> 包被装到 `~/.workbuddy-ai/skills/` 之后，上一级是 `skills/`，会去扫**别的技能包**；
+> 工作区里放着一份没跟着改的旧页面，就会报出一堆与交付物无关的 `[E2]`。
+> 要把包外的页面也一起扫，显式指定那个目录。
 
 > **只做单向校验不算数。** 单向校验会让「模板在用、规范没收编」的私有 Token 悄悄长出来。
+>
+> **E4 是结构级回归**：凡是「批量改模板时可能漏掉某个文件」的约定，
+> 都写进 `foundation/conventions.json` 让校验器把关，不要只写在文档里——靠肉眼审必然漏。
 
 ## 3.1 提交门禁（让约束自动生效）
 
 ```bash
+cd "$SPEC_ROOT/.."    # {{PACKAGE}}/ 是相对路径，需要先站在包所在目录
 $NODE {{PACKAGE}}/scripts/install-hooks.js install   # 装（幂等）
 $NODE {{PACKAGE}}/scripts/install-hooks.js status    # 查状态
 $NODE {{PACKAGE}}/scripts/install-hooks.js uninstall # 卸
 ```
 
-- 只校验不改码；紧急绕过 `git commit --no-verify` 或 `GF_SKIP_TOKEN_CHECK=1`（**事后必须补修**）
+- 只校验不改码；紧急绕过 `git commit --no-verify` 或 `{{PREFIX_UP}}_SKIP_TOKEN_CHECK=1`（**事后必须补修**）
 - `.git/hooks/` 不受版本控制，**每个 clone 都要装一次**
 - 完整说明见 `scripts/HOOKS-GUIDE.md`
 
@@ -72,24 +130,66 @@ $NODE {{PACKAGE}}/scripts/install-hooks.js uninstall # 卸
 | 页面结构 | `pages/<type>-page.md` |
 | 组件规格 | `components/*.md` |
 | 任何数值 | `foundation/tokens.md` |
+| 页面外壳怎么搭 | `scripts/layout/README.md` |
+| 内容区模板怎么搭 / 浮层档位怎么声明 | `scripts/templates/README.md` + `scripts/templates/contract.json` |
+| 结构级约定有哪些 | `foundation/conventions.json` |
 | 设计稿与规范比对 | `foundation/design-sync.md` + `scripts/check-design-sync.js` |
 | 模板选型与拼装 | `scripts/README.md` |
 | 某类页面「长什么样」 | `examples/` |
+
+> 想在**任意工作区**唤起本系统的规范能力（不必先 cd 到包目录），
+> 把包根的 `USER-SKILL.md` 复制成 `~/.workbuddy-ai/skills/{{PREFIX}}-design-system/SKILL.md` 即可。
+> 那是精简版入口，信息量不如本文件——查细节仍以本文件为准。
 
 <!-- 页面/组件类型清单在建包时按实际采集结果生成，不要预先写死不存在的类型 -->
 
 ## 5. 强约束清单
 
-<!-- 建包时按实际采集与评审结果填写。写法建议：一条一行，写清「现象 + 为什么 + 正确做法」。
-     只写在本系统真实发生过或验证过的约束，不抄其它系统的清单。 -->
+<!-- **本清单不预置条目**：建包时按实际采集与评审结果填写。
+     写法建议：一条一行，写清「现象 + 为什么 + 正确做法」。
+     只写在本系统真实发生过或验证过的约束，不抄其它系统的清单——
+     抄来的约束会让人去检查本系统里根本不存在的结构。
+
+     能批量校验的约束**不要只写在这里**：写进 foundation/conventions.json，
+     由 check-tokens.js 的 [E4] 逐条把关。写在文档里靠肉眼审必然漏。 -->
 
 | # | 约束 | 为什么 |
 | :-- | :-- | :-- |
-| 1 | 交付前跑双向 Token 校验且退出码为 0 | 单向校验会漏掉规范未收编的 Token |
+|  |  |  |
 
 ## 6. 标杆页面
 
 <!-- 建包后按实际页面类型生成，见 examples/ -->
+
+## 7. 维护规则（规范怎么长）
+
+规范不是建包时一次性定死的。使用中撞上规范没覆盖的做法，按下面的路径收编，而不是就地写死或绕开校验。
+
+**收编（[W1] 报出时的标准动作），三步：**
+
+1. **页面里先试出来**——写页面撞上规范没覆盖的做法，不就地写死，先记下来；
+2. **写回规范**——语义与取值确认后，登记进 `foundation/tokens.md`（或对应组件 / 页面文档），再回灌模板 `:root`；
+3. **全站换新**——原来散在各页面里的临时写法一并替换成正式 Token。页面里试出来的做法，不停留在页面里。
+
+**清废值（[I1] 报出时）**：规范里有、全库零引用的 Token，要么用起来，要么删掉，二选一——规范不攒没人用的值。
+
+**新增时各改哪里：**
+
+| 要新增什么 | 改动清单 |
+| :-- | :-- |
+| Token | 先 `foundation/tokens.md` 定值 → 回灌模板 `:root`。顺序反了必双源漂移 |
+| 页面类别 | `scripts/templates/<类别>/` 模板（浮层类还要登记 `contract.json`）→ `pages/<类别>-page.md` 结构规范 → `examples/` 标杆页 → 本文件 §4 路由与 §5 强约束同步 |
+| 组件 | `components/<组件>.md`，取值只引用 Token |
+| 结构级约定 | `foundation/conventions.json`（`[E4]` 逐条校验）。凡是「批量改模板可能漏掉某个文件」的约定都写进来，靠肉眼审必然漏 |
+
+**改既有取值（破坏性更正）**：档位收敛、语义改判之后，**全库 grep 旧值**——文档、模板、标杆页逐处同步；
+归并映射（旧值 → 新档）记进裁决记录。规范值与它的全部引用是一对，只改一半就是双源漂移。
+
+**破例**：业务上确实要破例时，由人拍板并**留下记录**（记进裁决 / 评审记录，写清场景与理由），不默默绕开校验；
+同时把类似的破例场景整理出来——收编成正式档位或写进强约束。破例可以，但要能被查出来。
+
+> 人不再逐页检查，只做两件事：**定规则、判例外**。
+> 规范覆盖不到的地方由人补进规范，业务确实要破例的地方由人拍板并留痕——其余整条链路（读规范、选模板、生成、校验）都可自动执行。
 
 ---
 

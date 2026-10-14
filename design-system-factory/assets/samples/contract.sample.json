@@ -1,0 +1,54 @@
+{
+  "system": "广发中后台系统",
+  "_说明": [
+    "【样例，只作参照，不要照抄】这是「广发中后台系统」填满之后的 contract.json，",
+    "它回答两个问题：",
+    "  1. 一份填满的契约长什么样（字段之间的对应关系）",
+    "  2. 浮层档位可以怎么划分（广发分了 3 档 modal / 2 档 drawer）",
+    "",
+    "为什么不能照抄：档位数量与宽度是**设计决策**，不是「中后台通用规律」。",
+    "  你的系统可能只有 1 档 modal、可能遮罩叫别的名字、可能根本没有 drawer。",
+    "  照抄过来，你的浮层模板会带着一套没在设计稿上验证过的宽度档上线。",
+    "",
+    "引擎自带的那份 contract.json 是**空契约**：types 是空数组、overlay 是空对象。",
+    "  所有取值都要按本系统的设计稿 / 线上实测裁决，",
+    "  流程见包内 scripts/templates/README.md「怎么裁决本系统的契约」。",
+    "",
+    "注意：下面 mask / openAttr / needles 里的 gf- 前缀，在实际包里会随类名前缀一起变，",
+    "  真正需要你裁决的是「有几类浮层、每类几档、每档多宽、注入时要带走哪些样式」。"
+  ],
+
+  "types": ["list", "form", "detail", "dashboard", "login", "modal", "drawer"],
+
+  "overlay": {
+    "modal": {
+      "label": "弹窗",
+      "mask": "gf-modal-mask",
+      "openAttr": "data-modal-open",
+      "needles": ["gf-modal", "gf-btn", "gf-form-field", "gf-table", "gf-link"],
+      "defaultSize": "confirm",
+      "sizes": {
+        "confirm": { "label": "确认 480", "cls": "gf-modal--confirm" },
+        "form": { "label": "表单 640", "cls": "gf-modal--form" },
+        "complex": { "label": "复杂 800", "cls": "gf-modal--complex" }
+      }
+    },
+    "drawer": {
+      "label": "抽屉",
+      "mask": "gf-drawer-mask",
+      "openAttr": "data-drawer-open",
+      "needles": ["gf-drawer", "gf-btn", "gf-form-field", "gf-desc", "gf-tag"],
+      "defaultSize": "detail",
+      "sizes": {
+        "detail": { "label": "详情 480", "cls": "gf-drawer--detail" },
+        "form": { "label": "表单 560", "cls": "gf-drawer--form" }
+      }
+    }
+  },
+
+  "alias": { "both": ["modal", "drawer"] },
+
+  "standalone": ["login"],
+
+  "tabsDir": "tabs"
+}

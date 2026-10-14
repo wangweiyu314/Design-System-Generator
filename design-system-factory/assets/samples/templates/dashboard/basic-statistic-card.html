@@ -4,6 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>基础指标卡 - 数据概览</title>
+  <!--
+    ============================================================
+    模板：基础指标卡（多列等分 + SVG sparkline）
+    样例：广发中后台系统的结构，只作参考，不要照抄
+    取值一律走 Token；改取值先改 foundation/tokens.md，再回灌本文件 :root
+    ============================================================
+  -->
   <style>
     :root {
       --color-primary: #2A6CDD;
@@ -30,11 +37,11 @@
       --chart-5: #1D4C9B;
       --radius-btn: 2px;
       --radius-card: 4px;
-      --shadow-card: 0 2px 8px rgba(0,0,0,0.10);
-      --shadow-dropdown: 0 6px 16px rgba(0,0,0,0.12);
+      --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.10);
+      --shadow-dropdown: 0 6px 16px rgba(0, 0, 0, 0.12);
       --space-1: 4px; --space-2: 8px; --space-3: 12px;
       --space-4: 16px; --space-5: 20px; --space-6: 24px;
-      --font-family: 'Microsoft YaHei', 'PingFang SC', 'SF Pro Display', 'DIN Alternate', sans-serif;
+      --font-family: 'Microsoft YaHei', 'PingFang SC', 'SF Pro Display', 'DIN Alternate', -apple-system, 'Helvetica Neue', Arial, sans-serif;
       --font-number: 'DIN Alternate', 'DIN', 'SF Pro Display', 'Helvetica Neue', sans-serif;
     }
 
@@ -135,7 +142,11 @@
       height: 10px;
     }
 
-    /* 迷你图表 */
+    /* 迷你图表
+     * ⚠ SVG 的 fill / stroke / stop-color 一律写成 style="stroke: var(--x)" 这种**样式声明**，
+     *   不要写成表现属性 stroke="var(--x)"——表现属性不参与 var() 替换，浏览器按无效值丢弃，
+     *   图表会静默变黑。色值更不能写 hex 字面量：那是硬编码，[E1] 会拦。
+     *   同一个值出现在多处时，只引用 Token，不要复制数值。 */
     .gf-stat-card__chart {
       width: 100%;
       height: 72px;
@@ -147,6 +158,7 @@
 <body>
   <h1 class="gf-section-title">数据概览</h1>
 
+  <!-- 业务替换点：指标名 / 数值 / 趋势方向与涨跌值（卡1~卡4 同构，只换文案与数据） -->
   <div class="gf-stat-grid">
     <!-- 卡1: 今日交易额 / 蓝色 -->
     <div class="gf-stat-card">
@@ -164,12 +176,12 @@
       <svg class="gf-stat-card__chart" viewBox="0 0 240 72" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="sparkBlue" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#2A6CDD" stop-opacity="0.22"/>
-            <stop offset="100%" stop-color="#2A6CDD" stop-opacity="0.08"/>
+            <stop offset="0%" style="stop-color: var(--chart-1)" stop-opacity="0.22"/>
+            <stop offset="100%" style="stop-color: var(--chart-1)" stop-opacity="0.08"/>
           </linearGradient>
         </defs>
         <polygon points="0,52 30,48 60,42 90,46 120,34 150,30 180,22 210,16 240,10 240,72 0,72" fill="url(#sparkBlue)"/>
-        <polyline points="0,52 30,48 60,42 90,46 120,34 150,30 180,22 210,16 240,10" fill="none" stroke="#2A6CDD" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+        <polyline points="0,52 30,48 60,42 90,46 120,34 150,30 180,22 210,16 240,10" fill="none" style="stroke: var(--chart-1);" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
       </svg>
     </div>
 
@@ -189,12 +201,12 @@
       <svg class="gf-stat-card__chart" viewBox="0 0 240 72" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="sparkGreen" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#52C41A" stop-opacity="0.22"/>
-            <stop offset="100%" stop-color="#52C41A" stop-opacity="0.08"/>
+            <stop offset="0%" style="stop-color: var(--color-success)" stop-opacity="0.22"/>
+            <stop offset="100%" style="stop-color: var(--color-success)" stop-opacity="0.08"/>
           </linearGradient>
         </defs>
         <polygon points="0,40 30,36 60,44 90,32 120,38 150,28 180,34 210,26 240,30 240,72 0,72" fill="url(#sparkGreen)"/>
-        <polyline points="0,40 30,36 60,44 90,32 120,38 150,28 180,34 210,26 240,30" fill="none" stroke="#52C41A" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+        <polyline points="0,40 30,36 60,44 90,32 120,38 150,28 180,34 210,26 240,30" fill="none" style="stroke: var(--color-success);" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
       </svg>
     </div>
 
@@ -215,12 +227,12 @@
       <svg class="gf-stat-card__chart" viewBox="0 0 240 72" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="sparkOrange" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#FAAD14" stop-opacity="0.22"/>
-            <stop offset="100%" stop-color="#FAAD14" stop-opacity="0.08"/>
+            <stop offset="0%" style="stop-color: var(--color-warning)" stop-opacity="0.22"/>
+            <stop offset="100%" style="stop-color: var(--color-warning)" stop-opacity="0.08"/>
           </linearGradient>
         </defs>
         <polygon points="0,30 30,40 60,28 90,46 120,36 150,50 180,34 210,28 240,20 240,72 0,72" fill="url(#sparkOrange)"/>
-        <polyline points="0,30 30,40 60,28 90,46 120,36 150,50 180,34 210,28 240,20" fill="none" stroke="#FAAD14" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+        <polyline points="0,30 30,40 60,28 90,46 120,36 150,50 180,34 210,28 240,20" fill="none" style="stroke: var(--color-warning);" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
       </svg>
     </div>
 
@@ -241,8 +253,8 @@
       <svg class="gf-stat-card__chart" viewBox="0 0 240 72" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="sparkPurple" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="var(--chart-5)" stop-opacity="0.22"/>
-            <stop offset="100%" stop-color="var(--chart-5)" stop-opacity="0.08"/>
+            <stop offset="0%" style="stop-color: var(--chart-5)" stop-opacity="0.22"/>
+            <stop offset="100%" style="stop-color: var(--chart-5)" stop-opacity="0.08"/>
           </linearGradient>
         </defs>
         <polygon points="0,50 30,44 60,48 90,36 120,32 150,28 180,24 210,18 240,14 240,72 0,72" fill="url(#sparkPurple)"/>

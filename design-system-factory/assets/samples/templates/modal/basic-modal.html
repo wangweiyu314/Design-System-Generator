@@ -4,6 +4,7 @@
   <meta charset="UTF-8" data-page-node-id="fxd0Z7u6CXHuu7dKG6LzYo">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="VDbyT0NGXA7e6pXxKsDP43">
   <title>弹窗模板 - 广发中后台设计系统</title>
+  <!-- 样例：广发中后台系统的结构，只作参考，不要照抄。 -->
   <!--
     ============================================================
     模板：弹窗 Modal（三段式）
@@ -21,7 +22,7 @@
       --modal-complex-width  800px  复杂表单、多模块配置、列表弹窗
 
     必做替换（搜索「业务替换点」）：
-      1. 弹窗标题 .gf-modal__title 文案
+      1. 弹窗标题 .gf-modal__title 文案（首个标题写成 @@页面标题@@，由 --name 填充）
       2. body 内容（表单字段 / 表格 / 提示文案）
       3. footer 按钮文案与回调（onConfirm / onCancel）
       4. 展示类浮层可删除整个 .gf-modal__footer（等于 React 的 footer={null}）
@@ -102,12 +103,11 @@
       background: var(--color-bg-canvas);
     }
 
-    /* ============================================================
-       演示用触发区（业务接入时删除）
-       ============================================================ */
+    /* @transient-start 演示用触发区（业务接入时删除）——生成器注入宿主页时会剔除本段 */
     .demo-launch { max-width: 800px; margin: 0 auto; }
     .demo-launch h1 { font-size: var(--font-size-body-lg); font-weight: 500; color: var(--color-text-heading); margin: 0 0 var(--space-4); }
     .demo-launch__row { display: flex; gap: var(--space-3); flex-wrap: wrap; }
+    /* @transient-end */
 
     /* ============================================================
        按钮（组件级，业务可直接复用）
@@ -306,8 +306,8 @@
 </head>
 <body data-page-node-id="W6BO9OBHXvFd1EVFsfj8br">
 
-  <!-- ===== 演示用触发区（业务接入时删除） ===== -->
-  <div class="demo-launch" data-page-node-id="RHKCuIPQWhQ9xFAMf76Bdj">
+  <!-- @transient-start 演示用触发区（业务接入时删除）——注入宿主页时剔除本段 -->
+  <div class="demo-launch" data-collect-ignore data-page-node-id="RHKCuIPQWhQ9xFAMf76Bdj">
     <h1 data-page-node-id="8BAeUedsiDqVlOylzHZ0fI">弹窗模板 · 三档宽度</h1>
     <div class="demo-launch__row" data-page-node-id="KjhemFHy0KiI6BWIULLoNr">
       <button class="gf-btn gf-btn--secondary" data-modal-open="modalConfirm" data-page-node-id="wX1qxNaDHxXvMFCpCFRDUf">确认弹窗 480</button>
@@ -315,12 +315,13 @@
       <button class="gf-btn gf-btn--secondary" data-modal-open="modalComplex" data-page-node-id="wXCWoWP2KRiMnPjxESXt4F">复杂弹窗 800</button>
     </div>
   </div>
+  <!-- @transient-end -->
 
   <!-- ===== 确认弹窗 480px：二次确认，无表单 ===== -->
   <div class="gf-modal-mask" id="modalConfirm" hidden data-page-node-id="Di0oN3KYH2EdE1EyLHguRx">
     <div class="gf-modal gf-modal--confirm" role="dialog" aria-modal="true" aria-labelledby="titleConfirm" data-page-node-id="0RpCK5molkDIsNY4WGsvmB">
       <div class="gf-modal__header" data-page-node-id="JHCv6r75pbExCI6fYCrnBn">
-        <h2 class="gf-modal__title" id="titleConfirm" data-page-node-id="s9ScwFB5IpOy4n3qCltFhF">删除确认</h2>
+        <h2 class="gf-modal__title" id="titleConfirm" data-page-node-id="s9ScwFB5IpOy4n3qCltFhF">@@页面标题@@</h2>
         <button class="gf-modal__close" data-modal-close aria-label="关闭" data-page-node-id="J7O9gDM9eTYomu0Aw9xHTZ">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" overflow="visible" data-page-node-id="BQWr3uwBO0sMROnoTz8SXk">
             <path d="M3.5 3.5 L12.5 12.5 M12.5 3.5 L3.5 12.5" data-page-node-id="jqMANeLI4T8Mr0gAgUqFjX"/>

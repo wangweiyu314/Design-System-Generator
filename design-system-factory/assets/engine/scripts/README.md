@@ -1,125 +1,135 @@
-# 广发中后台设计系统 — HTML 模板总索引
+# scripts/ — 引擎自带件（脚本 + 模板契约骨架）
 
-> 本目录是**代码起步基座**。生成页面时从这里复制对应模板再改业务字段，
-> 而不是从零写样式——这是保证 Token 化率、避免规范漂移的最短路径。
+> 本目录是**代码起步基座**：脚本 + 两份契约骨架 + 一份空契约。
+> **它不带任何成品模板，也不带任何成品的结构性取值** ——
+> 布局、内容区结构、浮层档位都要按本系统的设计稿 / 线上采集沉淀与裁决。
 >
-> 规范版本：design-specs **v2.10.3**　|　取值唯一来源：`foundation/tokens.md`
+> 系统名：广发中后台系统　|　类名前缀：`gf-`　|　取值唯一来源：`../foundation/tokens.md`
 >
-> 目录说明：技能包 = `design-specs/`。标杆页在 `examples/`，模板在 `scripts/`，
-> 规范正文在 `foundation/` `components/` `pages/`。
->
-> **v2.10 框架改版**：交付默认 MixedLayout（`layout/mixed-layout.html`）—— 通栏顶栏 56px 深蓝 #0C1D43 + 浅色侧边栏 200px 白底 + 卡片式多标签 40px + 内容流顶部面包屑（**v2.10.3 起不再占独立 48px 行**，见下）。
-> **深色侧边栏变体已废弃**（`layout/dark-side-layout.html` 已删除，20 个 `--nav-color-sider*` Token 已清理）。存量页面迁移对照见 `components/layout.md` §7.5 末尾。
->
-> v2.8 图表提示：手写 SVG 图表必须加 `max-height` 兜底，环形图直径要锁死（220px），
-> 色值一律经 `chartToken()` 读 CSS 变量。详见 `pages/dashboard-page.md` §图表实现约束。
->
-> v2.9 按钮语义提示：裸 `.gf-btn` = **主按钮**，次按钮 `.gf-btn--secondary`、危险 `.gf-btn--danger`；
-> **禁止 `.gf-btn--primary`**（历史上浮层模板语义相反，已统一）。详见 `components/basic.md` §按钮 CSS 类语义（强制）。
+> 目录说明：技能包 = `design-specs/`。脚本在 `scripts/`，规范正文在 `foundation/` `components/` `pages/`。
 
 ---
 
-## 1. 模板清单
+## 0. 关于本目录的「自带」与「不自带」
 
-| 模板 | 分类 | 用途 | 状态 |
-| :-- | :-- | :-- | :-- |
-| `layout/mixed-layout.html` | 布局 | **v2.10 唯一布局**：通栏顶栏（56px 深蓝）+ 浅色侧边栏（200px 白底）+ 卡片式多标签 + 内容流顶部面包屑（v2.10.3 起并入内容流，无独立行/无背景） | v2.10 新增 / v2.10.3 收尾 |
-| `layout/side-layout.html` | 布局 | 侧边导航布局（仅作选型参考） | 仅作参考 |
-| `navigation/multi-tab-nav.html` | 导航 | **多标签导航**（卡片式页签 + 箭头溢出切换、三项关闭策略；页签宽度由内容决定） | v2.10 卡片化 / v2.10.3 同步 |
-| `table/basic-table.html` | 表格 | 基础表格（表格卡节奏、操作列、分页） | 已沉淀 |
-| `table/fixed-action-table.html` | 表格 | **固定操作列表格**（sticky 右固定列 + 分隔阴影） | v2.4 沉淀 |
-| `form/basic-form.html` | 表单 | 基础表单（垂直布局、字段宽度档、底部操作栏） | 已沉淀 |
-| `charts/basic-statistic-card.html` | 指标卡 | 基础指标卡（多列等分 + SVG sparkline） | 已沉淀 |
-| `description-list/basic-descriptions.html` | 描述列表 | 基础描述列表（多列布局、Tag 标签、长文本） | 已沉淀 |
-| `pages/login-page.html` | 页面 | **登录页**（样式一 渐变双栏 / 样式二 白底单栏，含完整交互） | v2.5 新增 |
-| `modal/basic-modal.html` | 浮层 | **弹窗**（三段式 header/body/footer + 480/640/800 三档宽度） | v2.6 新增 |
-| `drawer/basic-drawer.html` | 浮层 | **抽屉**（自定义固定工作栏 + 480/560 两档宽度） | v2.6 新增 |
-
-### 标杆页索引（`../examples/`）
-
-规则写在规范文档里，**「长什么样」看标杆页**。改模板或规范后，标杆页就是回归基线。
-
-| 标杆页 | 类型 | 看点 |
+| 类别 | 内容 | 说明 |
 | :-- | :-- | :-- |
-| `../examples/demo.html` | 列表页 | v2.10 MixedLayout：通栏顶栏 + 浅色侧边栏、卡片式多标签、内容流顶部面包屑（v2.10.3 起）、固定操作列表格、常驻底部操作栏 |
-| `../examples/demo-form.html` | 表单页 | 字段宽度档、双列布局、校验提示、底部操作栏 |
-| `../examples/demo-detail.html` | 详情页 | 描述列表、流程时间轴、关联表格、Tag 标签 |
-| `../examples/demo-dashboard.html` | 仪表盘页 | KPI 指标卡、SVG 图表（`max-height` 兜底 / 环形直径锁死） |
-| `../examples/demo-login.html` | 登录页 | 渐变双栏 980×616 / 白底单栏 408×430、图标 36px 预留 |
-| `../examples/demo-overlay.html` | 页面 + 浮层 | 弹窗 640 + 抽屉 480、遮罩作用域隔离 |
-| `../examples/产品备案登记表单.html` | 交付样例 | 真实业务表单页（v2.10 框架；无多标签） |
+| **自带** | 脚本（校验 / 生成 / 门禁 / 设计稿核对） | 逻辑通用，不含任何具体系统的取值 |
+| **自带** | `layout/_skeleton.html`、`templates/_skeleton.html` | 契约骨架：只声明「要满足什么」，不含任何页面结构 |
+| **自带** | `templates/contract.json` | 结构性契约的**声明格式**。建包时是**空契约**（`types: []`、`overlay: {}`） |
+| **不自带** | `layout/` 下的页面外壳 | **必须按本系统设计稿沉淀**，见 `layout/README.md` |
+| **不自带** | `templates/<类别>/` 下的内容区模板 | **必须按本系统设计稿沉淀**，见 `templates/README.md` |
+| **不自带** | `contract.json` 的**取值**（有哪几类页面、浮层分几档、每档多宽） | 按本系统设计稿裁决，见 `templates/README.md`「怎么裁决本系统的契约」 |
 
-> 生成器产出的页面默认落在当前目录；若要沉淀为标杆页，输出到 `../examples/` 并回本表登记。
+### 为什么内容区模板也不自带
+
+「表格就是表格、表单就是表单」听起来很合理，但它只对了一半：
+
+- **结构**大体相似 —— 这正是最容易让人以为可以照抄的地方
+- **取值阶梯**完全不是 —— 模板带着一整套间距档（`--space-1..16`）、色板（`--chart-1..4`）、
+  圆角档、阴影档。这些档位是**上一套系统的设计决策**，不是通用的
+
+照抄过来的结果：规范里凭空多出几十个 Token 条目，每一条看起来都像一个正经的规范项，
+没人知道它从哪来、对应本系统的哪个组件。而校验器是**绿的** —— 因为每个条目都被「登记」了。
+
+所以引擎只给骨架：没有结构、没有取值，只有约束。
+参考样例（广发的真实模板）放在工厂包 `assets/samples/templates/`，只作参考，不参与建包。
+
+### 为什么连契约取值也不预置
+
+同样的道理往上推一层：`contract.json` 里「有几类页面、浮层分几档、每档多宽」也是
+**某一个系统的设计决策**，不是「中后台通用规律」。预置进去，新包会照着改而不是去采集，
+最后浮层模板带着一套没在设计稿上验证过的宽度档上线。
+
+所以引擎里那份是**空契约**，只保留「字段叫什么、各自管什么」的声明格式说明。
+一份填满的样子在工厂包 `assets/samples/contract.sample.json`（**只作参照，不要照抄**）。
 
 ---
 
-## 2. 选型决策树
+## 1. 文件清单
 
-### 2.1 布局选型（v2.10）
-
-| 判断条件 | 选它 | 依据 |
+| 文件 | 类别 | 用途 |
 | :-- | :-- | :-- |
-| **0→1 新建系统（默认）**） | `layout/mixed-layout.html`（通栏顶栏 + 浅色侧边栏） | `components/layout.md` §7.5 |
-| 已有项目中加页面 | **不套布局模板**，只生成内容区（`--layout=none`） | SKILL.md「页面生成工作流」第 2 条 |
-| 深色侧边栏 + 菜单搜索 + 底部用户区（**已废弃**） | 旧 `layout/dark-side-layout.html` 已删除，请迁移至 mixed-layout | `components/layout.md` §7.5 末尾 |
+| `layout/_skeleton.html` | 契约骨架 | **不是布局**。搭本系统外壳时的起手文件 |
+| `templates/_skeleton.html` | 契约骨架 | **不是模板**。搭本系统内容区模板时的起手文件 |
+| `templates/contract.json` | 契约声明 | **空契约**。浮层遮罩类名 / 宽度档位 / 样式提取范围 / `--type` 取值清单的声明位，取值待本系统裁决 |
+| `check-tokens.js` | 脚本 | Token **双向**对齐校验 + 框架约定回归 |
+| `new-page.js` | 脚本 | 一键生成页面 / 浮层脚手架 |
+| `install-hooks.js` | 脚本 | 把规范校验装进 git 提交环节 |
+| `check-design-sync.js` | 脚本 | 设计稿 ↔ 规范**双向**核对 |
 
-### 2.2 内容区选型
+参考样例（**不要照抄**）：工厂包 `assets/samples/templates/` 下有广发的 8 类内容区模板，
+`assets/samples/layout.sample.html` 是广发的外壳，
+`assets/samples/contract.sample.json` 是广发填满的契约。
+它们只回答「一类模板大概需要哪些部分」「契约填满后长什么样」，不提供起点 ——
+**起点是设计稿**。
 
-| 页面类型 | 主模板 | 配套 |
-| :-- | :-- | :-- |
-| 列表页 | `table/fixed-action-table.html`（有横向滚动/固定操作列）<br>`table/basic-table.html`（列少、无需固定） | `layout/mixed-layout.html`（内置卡片式多标签与内容流顶部面包屑） |
-| 表单页 | `form/basic-form.html` | 同上 |
-| 详情页 | `description-list/basic-descriptions.html` | 配套表格用 `table/basic-table.html` |
-| 仪表盘页 | `charts/basic-statistic-card.html` | `components/statistic-card.md` 选型表 |
-| 登录页 | `pages/login-page.html` | 不套布局，独立全屏页 |
+> 生成器产出的页面默认落在当前工作目录；沉淀为标杆页请输出到 `../examples/` 并登记。
 
-### 2.3 表格选型
+---
 
-| 判断条件 | 选它 |
+## 2. 沉淀与选型
+
+### 2.1 布局
+
+| 场景 | 怎么做 |
 | :-- | :-- |
-| 列数多、需横向滚动、操作列需常驻 | `fixed-action-table.html` |
-| 列数少（≤6）、无横向滚动 | `basic-table.html` |
+| **0→1 新建系统** | 先按 `layout/README.md` 从设计稿沉淀布局，再生成页面 |
+| **已有项目中加页面** | **不套布局**，只生成内容区：`--layout=none`，外壳由宿主管 |
+| 本系统有多种外壳 | 每种外壳一份 `<名字>.html`，生成时用 `--layout=<名字>` 指定 |
 
-### 2.4 指标卡选型
+本系统到底有几种外壳，看 `mine-tokens.js` 报告第 2 节「布局候选」——
+那是从线上采集的外壳指纹推出来的，不是猜的。
 
-| 判断条件 | 类型 | 依据 |
-| :-- | :-- | :-- |
-| 单个核心指标 + 迷你趋势图 | 基础指标卡 | `components/statistic-card.md` |
-| 多个同级核心指标横向并排 | 同级指标卡 | 同上 |
-| 总量与分项占比关系 | 总分指标卡 | 同上 |
-| 多个独立指标 + 每卡 mini chart | 嵌套指标卡 | 同上 |
-| 多维指标通过页签切换 | 页签联动指标卡 | 同上 |
+### 2.2 内容区模板
 
-### 2.5 浮层选型
+落位 `templates/<类别>/<名字>.html`，**目录名即 `--type` 取值**。
+发现规则与布局完全一致：
 
-| 判断条件 | 选它 | 宽度 Token |
-| :-- | :-- | :-- |
-| 二次确认、简短提示 | `modal/basic-modal.html` → `.gf-modal--confirm` | `--modal-confirm-width` 480px |
-| 普通单列表单 | `modal/basic-modal.html` → `.gf-modal--form` | `--modal-form-width` 640px |
-| 复杂表单、多模块配置、列表弹窗 | `modal/basic-modal.html` → `.gf-modal--complex` | `--modal-complex-width` 800px |
-| 信息详情、只读预览 | `drawer/basic-drawer.html` → `.gf-drawer--detail` | `--drawer-detail-width` 480px |
-| 单列垂直表单，需保留页面上下文 | `drawer/basic-drawer.html` → `.gf-drawer--form` | `--drawer-form-width` 560px |
+| 该类模板数 | 行为 |
+| :-- | :-- |
+| 0 个 | `new-page.js` 报错并打印沉淀步骤（不静默退化到别的结构） |
+| 1 个 | 自动用它 |
+| 多个 | 必须 `--template=<名字>` 指定 |
 
-**浮层强约束（改动即踩坑）**
+本系统该有哪几类，看 `mine-tokens.js` 报告第 1 节「页面结构特征」+ 设计稿。
+只沉淀**本系统确实有**的类别——没有仪表盘就不要建仪表盘目录，
+否则等于凭空给系统加了一类页面，而它看起来像工厂要求的。
 
-- Modal 必须三段式，`container` 强制 `padding: 0`（否则分割线左右不到头）
-- Modal 头部 **52px**（`--floating-header-height`）、底部 **52px**（`--floating-footer-height`）
-- Drawer 头部 **56px**（`--floating-drawer-header-height`），与 Modal **不同值**，勿混用
-- Drawer 禁用默认 `title` / `closable`，一律自定义 header，操作按钮放 header 右侧
-- 桌面端 Drawer **默认不生成 footer**，仅移动端或强流程才加
-- `body` 是唯一滚动区，禁止把操作区卷进滚动区
-- 展示类浮层（详情、只读）不生成 footer；操作类（新增、编辑、审批）必须有固定可见操作区
-- 必须有视口兜底 `max-width: calc(100vw - 48px)`，且上下居中（禁止 `top: 100px`）
+`contract.json` 的 `types` 是**可选**白名单：留空则完全按目录名发现
+（建了什么目录就有什么类别），填了才额外校验。
+
+### 2.3 浮层
+
+浮层的档位与遮罩类名声明在 `templates/contract.json`，不在生成器里。
+本系统的弹窗只有两档宽度、遮罩叫别的名字、想加一类 `popover` —— 都改 `contract.json`。
+
+**引擎不预置浮层契约**，建包时 `overlay` 是空的。要裁决三件事：
+
+1. **有哪几类浮层** —— 报告第 1 节的弹窗 / 抽屉信号 + 设计稿里实际画的浮层
+2. **每类几档、每档多宽** —— 从设计稿量。**档位数不是通用常量**：
+   有的系统只有一档确认框，有的分确认 / 表单 / 复杂三档
+3. **遮罩类名 / 触发属性 / 提取范围** —— 本系统的类名与属性名，
+   `needles` 从「注入宿主页时要带走哪些样式规则才不残缺」反推
+
+裁决完写进 `contract.json`，再建 `templates/<类别>/` 放模板，两边类名与档位对齐。
+完整流程见 `templates/README.md`「怎么裁决本系统的契约」。
+
+> 广发给浮层定过一组结构约束（三段式 / `padding: 0` / Drawer 默认不出 footer…）。
+> 那是**广发的设计决策**，不是中后台通用规律，所以放在样例那边：
+> 见 `assets/samples/templates/README.md`「参考：广发给浮层定的结构约束」。
+> 本系统的约束要自己裁决：能批量校验的写进 `../foundation/conventions.json`
+> （`[E4]` 会逐条查），靠肉眼审是审不住的。
 
 ---
 
 ## 3. 使用工作流
 
 ```
-1. 判类型   → pages/ 下对应规范文档（list / form / detail / dashboard / login）
-2. 选布局   → layout/mixed-layout.html（v2.10 唯一布局）
-3. 选内容   → 按 §2.2 选型表挑内容区模板
-4. 拼装     → 用 new-page.js 一键拼装（默认 mixed），或手工把内容区塞进布局模板 .gf-content
+1. 判类型   → 本系统已裁决的类别（contract.json 的 types，或 templates/ 下的目录名）
+2. 选布局   → 本系统的布局（scripts/layout/），已有项目加页面则用 --layout=none
+3. 选内容   → 本系统已沉淀的 templates/<类别>/ 模板
+4. 拼装     → 用 new-page.js 一键拼装，或手工把内容区塞进布局的 <!-- @content-slot -->
 5. 换业务   → 只替换「业务替换点」注释处：标题、菜单、字段、数据、提交逻辑
 6. 保结构   → 关键 className、Design Token、间距节奏、交互分区一律不动
 7. 跑校验   → node design-specs/scripts/check-tokens.js design-specs --strict
@@ -131,36 +141,70 @@
 
 ```html
 <!-- 业务替换点：菜单分组（标题 + 菜单项 + 图标） -->
-<!-- ★ 业务替换点：替换为真实登录接口调用 -->
+<!-- ★ 业务替换点：替换为真实接口调用 -->
 ```
+
+### 文案占位符约定
+
+模板里要填页面标题的地方写 `@@页面标题@@`，系统名写 `@@系统名@@`，
+生成时按 `--name` / `--system` 填进去。
+
+**生成器不认识任何具体系统的类名** —— 它不会去猜「弹窗标题的 class 叫什么」。
+没写占位符的模板不会被替换，这不是 bug，是模板没声明它要接哪个值。
+
+### 演示区约定
+
+只为让人看得见而造的块（触发按钮 / 假数据 / 说明文字）要打**两个**标记：
+
+```html
+<!-- @transient-start 演示用触发区（业务接入时删除） -->
+<div class="demo-launch" data-collect-ignore>
+  <button class="你的按钮类名" data-<类别>-open="<遮罩 id>">打开浮层</button>
+</div>
+<!-- @transient-end -->
+```
+
+| 标记 | 管什么 | 漏了会怎样 |
+| :-- | :-- | :-- |
+| `@transient-start/end`（注释） | 注入宿主页时**整段剔除** | 别人的页面里多出「当前激活标签：首页」这类演示 DOM |
+| `data-collect-ignore`（属性） | 采集时**整块跳过** | 演示区的 `em` 取值（`7px` / `11.9px`）被当成你的设计取值 |
+
+两个都要打。CSS 里的演示区样式用同款标记包在块注释里。
+详见 `templates/README.md`「演示区：两种标记，两个目的」。
 
 ### 禁止改动清单
 
 - `:root` 中的 Token **取值**（要改先改 `foundation/tokens.md`，再回灌）
-- `.gf-` 前缀的 className 与 BEM 命名结构
-- 表格卡内部节奏（水平 24px 内容线 / 垂直 16px / 首末列 24px）
-- 固定列的 `border-collapse: separate`（强约束 #18）
-- 多标签的箭头溢出方案（强约束 #19）
+- `<前缀>-` 的 className 与 BEM 命名结构
+- 模板里已按本系统裁决写下的结构节奏（间距组合、固定列方案、溢出方案）
+- 演示区的 `@transient` / `data-collect-ignore` 标记（删了就会漏出去）
 
 ---
 
 ## 4. 模板验收清单
 
-复制模板改造后，逐项自检：
+搭好或改造一份模板后，逐项自检：
+
+**通用项**（每个系统都该过）：
 
 - [ ] `node design-specs/scripts/check-tokens.js design-specs --strict` 退出码 0
+- [ ] 无 `[E5] 取值待填`——所有 `unset` 都已回灌为定稿取值
+- [ ] 若本系统是双主题：无 `[E6] 亮色覆盖不全`——凡「亮色≠暗色」的 Token 都已进亮色块
+      （`[E6]` 只在文件**自己声明过亮色块**时才判，单主题交付物此项天然为 0）
 - [ ] 无 JS 控制台报错，内联 `<script>` 语法通过
 - [ ] 无外链资源（CDN、图片、图标字体），图标全部内联 SVG
-- [ ] 页面标题只渲染一次（PageHeader 是唯一来源，强约束 #6）
-- [ ] PageHeader 无 `padding-inline`（强约束 #7）
-- [ ] 面包屑仅出现在有上级路径的页面（强约束 #8）；**v2.10.3 起位于 `.gf-content` 内并作为其首子元素**，无独立行、无背景，上下留白由 `padding: var(--space-3) 0` 自带；`.gf-content` 的 `padding-top` 必须为 0（由 [E4-2] 自动校验）
-- [ ] 分页器未出现 margin + padding 叠加 32px（强约束 #12）
-- [ ] 固定操作列使用 `border-collapse: separate`（强约束 #18）
-- [ ] 多标签为卡片式（页签宽度由内容决定、可关闭页签右侧留白 32px 使 X 不挤文字、激活白底 + 主色文字、页签间 1px 分隔线、栏体下投影且肉眼可见），溢出用箭头、滚动条隐藏（强约束 #19）
-- [ ] 指标卡 mini chart 为 SVG sparkline，非 img 占位
-- [ ] 浮层容器 `padding: 0`，分割线横向到边缘
-- [ ] 浮层上下居中且有 `max-width: calc(100vw - 48px)` 兜底
-- [ ] Drawer 用自定义 header（56px），未使用默认标题栏结构
+- [ ] 结构照设计稿，不是照别的系统的模板补的
+- [ ] 演示区已打 `@transient` 与 `data-collect-ignore`
+- [ ] 本系统的结构级约定已写进 `foundation/conventions.json`，`[E4]` 有实际规则数
+
+**本系统自定项**（从本系统的设计稿 / 评审里长出来，逐条写进
+`foundation/conventions.json` 让 `[E4]` 把关，而不是只写在这里）：
+
+- [ ] 本系统对表格 / 表单 / 浮层 / 导航各自的结构约束，能批量校验的都已进校验器
+- [ ] 本系统不接受的历史写法（如某属性禁用、某取值必须走 Token）已列成规则
+
+> 广发那份具体的验收清单在 `assets/samples/templates/README.md`，
+> 只作参照——**照抄等于把别人的设计决策当成本系统的规范**。
 
 ---
 
@@ -168,8 +212,8 @@
 
 | 脚本 | 用途 | 用法 |
 | :-- | :-- | :-- |
-| `check-tokens.js` | Token **双向**对齐校验 | `node design-specs/scripts/check-tokens.js design-specs --strict [--json]` |
-| `new-page.js` | 一键生成页面 / 浮层脚手架 | `node design-specs/scripts/new-page.js --type=list --name=产品列表` |
+| `check-tokens.js` | Token **双向**对齐校验 + 框架约定回归 + 双主题覆盖检查 | `node design-specs/scripts/check-tokens.js design-specs --strict [--json]` |
+| `new-page.js` | 一键生成页面 / 浮层脚手架 | `node design-specs/scripts/new-page.js --type=<类别> --name=<页面名>` |
 | `install-hooks.js` | 把规范校验装进 git 提交环节 | `node design-specs/scripts/install-hooks.js install`<br>📖 完整用法见 **[HOOKS-GUIDE.md](./HOOKS-GUIDE.md)** |
 | `check-design-sync.js` | 设计稿 ↔ 规范**双向**核对（抓两个真值源的漂移） | `node design-specs/scripts/check-design-sync.js <导出文件>`<br>📖 映射与流程见 `../foundation/design-sync.md` |
 
@@ -187,55 +231,63 @@ node design-specs/scripts/install-hooks.js uninstall # 卸
 三步上手、被拦后怎么改、紧急绕过、团队协作、CI 配合等完整说明见
 **[HOOKS-GUIDE.md](./HOOKS-GUIDE.md)**。
 
-> 当前工作区尚未 `git init`，无法安装门禁。想先验证规范是否达标，直接跑
-> `node design-specs/scripts/check-tokens.js design-specs --strict`（退出码 0 即达标）。
-
-### new-page.js 参数（v1.2：页面 + 浮层全覆盖）
+### new-page.js 参数
 
 ```
-node design-specs/scripts/new-page.js --type=<类型> --name=<名称> [选项]
+node design-specs/scripts/new-page.js --type=<类别> --name=<页面名> [选项]
 
---type     list | form | detail | dashboard | login | modal | drawer
---layout   mixed（默认，v2.10 通栏顶栏 + 浅色侧边栏）| none（只要内容区）
---tabs     mixed 内置卡片式多标签，--tabs 忽略
---overlay  给页面附带浮层骨架，逗号分隔，每档可带尺寸：
-             modal           弹窗 confirm(480) 档
-             modal:form      弹窗 form(640) 档
-             modal:complex   弹窗 complex(800) 档
-             drawer          抽屉 detail(480) 档
-             drawer:form     抽屉 form(560) 档
-             both            modal + drawer（各取默认档）
+--type     页面类别，取值 = scripts/templates/ 下的目录名。
+             生成器不预设任何类别——「中后台有哪几类页面」是每个系统自己的答案。
+             contract.json 的 types 是可选白名单；留空则完全按目录名发现。
+             某一类实际能不能用，取决于 scripts/templates/<类别>/ 下有没有模板。
+             属于浮层类别的（遮罩类名在 contract.json 的 overlay 里声明）
+             直接产出可独立打开的浮层演示页
+--name     标题，填入 <title>、布局的 @page-title 与模板里的 @@页面标题@@
+--layout   布局名 = scripts/layout/ 下的文件名（不含 .html）
+             不写：本包只有一个布局时自动用它；有多个则必须指定；一个都没有会报错并给沉淀步骤
+             none：只要内容区（已有项目里加页面时用）
+--template 同一类别沉淀了多个模板时，指定用哪一个（不带 .html）
+--tabs     把多标签栏插进布局的 <!-- @tabs-slot -->（布局没留该标记则忽略并提示）
+--overlay  给页面附带浮层骨架，逗号分隔，写法 <类别>[:<档位>]
+             类别、档位与组合别名全部来自 scripts/templates/contract.json
+             overlay 为空时本参数不可用（先裁决契约，报错会打印步骤）
 --no-trigger  不注入「演示入口」触发条
---out      输出路径  --system 系统名  --no-check 跳过校验
+--out      输出路径  --no-check 跳过校验
+--system   系统名。不传则取本包 templates/contract.json 的 system；
+           两处都没有则**不兜底**，把 @@系统名@@ 留在产物里并打印警告
+           （★ 引擎绝不替某个系统起名——见 CHANGELOG v1.13）
 ```
 
-四种典型用法：
+典型用法（`<类别>` 换成本包已沉淀的类别名）：
 
 ```bash
-# 1）独立浮层演示页（modal / drawer 直接产出可打开的页面）
-node design-specs/scripts/new-page.js --type=modal  --name=新增客户
-node design-specs/scripts/new-page.js --type=drawer --name=客户详情
+# 1）独立浮层演示页（浮层类别直接产出可打开的页面）
+node design-specs/scripts/new-page.js --type=<浮层类别> --name=<页面名>
 
 # 2）页面 + 浮层一次到位（可指定档位）
-node design-specs/scripts/new-page.js --type=list  --name=交易申报记录 --overlay=modal:form,drawer
-node design-specs/scripts/new-page.js --type=form  --name=新增交易申报 --overlay=modal:form
+node design-specs/scripts/new-page.js --type=<类别> --name=<页面名> --overlay=<浮层类别>:<档位>
 
 # 3）只出内容区（已有项目里加页面）
-node design-specs/scripts/new-page.js --type=form --name=新增交易申报 --layout=none
+node design-specs/scripts/new-page.js --type=<类别> --name=<页面名> --layout=none
+
+# 4）本系统有多种外壳时显式指定
+node design-specs/scripts/new-page.js --type=<类别> --name=<页面名> --layout=<布局名>
 ```
 
-**浮层接入**：生成器会打印遮罩 `id`，给任意按钮加 `data-modal-open="<id>"` /
-`data-drawer-open="<id>"` 即可打开；关闭已内置（关闭图标 / 取消 / 点遮罩 / Esc）。
+**浮层接入**：生成器会打印遮罩 `id` 与触发属性名，给任意按钮加上即可打开；
+关闭已内置（关闭图标 / 取消 / 点遮罩 / Esc）。
+触发属性名与遮罩类名都来自 `templates/contract.json`。
 默认还会注入一条「演示入口」触发条，页面一打开就能点开浮层验收，
 **接入业务后搜索「演示入口」整块删除**（`--no-trigger` 可不注入）。
 
 **⚠ 浮层样式的作用域不要去掉**：注入宿主页面的浮层 CSS 会被自动改写为
-`.gf-modal-mask …` / `.gf-drawer-mask …`。作用是防止浮层规则反向污染宿主页面
-（v2.9 前浮层与布局的按钮语义相反，曾导致全站主按钮集体变白；语义虽已统一，
+`.<遮罩类名> …`（遮罩类名来自 `templates/contract.json`）。作用是防止浮层规则反向污染宿主页面
+（历史上浮层与布局的按钮语义曾相反，导致全站主按钮集体变白；语义统一后
 作用域隔离仍是必要的兜底——两边同名类的取值仍可能各自演进）。
 
 生成器的防呆：模板缺失在参数阶段就报错（不抛栈）；`--out` 指向目录会提示带文件名；
-档位非法会列出可选值；注入浮层时剔除宿主已有规则，并过滤演示页专用的 `.demo-launch`。
+档位非法会列出本包可选值；契约为空时给裁决步骤；注入浮层时剔除宿主已有规则；
+模板里的演示区按 `@transient` 标记整段剔除。
 
 ### check-design-sync.js（设计稿 ↔ 规范）
 
@@ -269,43 +321,88 @@ node design-specs/scripts/check-design-sync.js <导出文件> --strict
 
 | 级别 | 项 | 含义 |
 | :-- | :-- | :-- |
-| E1 | 硬编码色值 | 正文出现未在 `:root` 声明的 hex / rgb 字面量 |
-| E2 | 取值漂移 | 文件 `:root` 定义与 `foundation/tokens.md` 不一致（**规范 → 交付物**） |
+| E1 | 硬编码色值 | 正文出现未在 `:root`（及主题覆盖块）声明的 hex / rgb 字面量 |
+| E2 | 取值漂移 | 文件 `:root` / 主题覆盖块的定义与 `foundation/tokens.md` 不一致（**规范 → 交付物**） |
 | E3 | 未定义引用 | `var(任意 Token 名)` 被使用但本文件未定义（**交付物 → 规范**） |
+| E4 | 框架约定 | 本系统结构级约定回归，规则来自 `foundation/conventions.json` |
+| E5 | 取值待填 | `:root` 里取值仍为 `unset`（模板尚未回灌定稿取值） |
+| E6 | 亮色覆盖不全 | 声明了亮色块，却没覆盖全「亮色值 ≠ 暗色值」的 Token |
 | W1 | 规范未收编 | 文件已定义并使用，但 `tokens.md` 未登记（潜在双源漂移） |
 | I1 | 规范未落地 | `tokens.md` 有定义但全库零使用（信息项，供清理废 Token） |
-| E4 | 框架结构一致 | 框架约定级回归，见下节（v2.10.3 新增） |
 
 > 双向 = 既查「交付物有没有按规范写」，也查「规范有没有收全交付物在用的」。
-> 只做单向会在模板里悄悄长出规范管不到的私有变量——v2.5 之前就是这样欠下 58 个未收编 Token 的。
+> 只做单向会在模板里悄悄长出规范管不到的私有变量。
 
-### check-tokens.js 的 [E4] 框架结构一致性
+### 双主题：规范怎么写、交付物怎么落
 
-E1/E2/E3 只管**取值对不对**，管不了**结构对不对**。E4 补的是后者：
+本系统的样式约定可能是「同一份样式写两个主题分支」：
 
-| 编号 | 断言 |
+```css
+html[data-theme='dark']  { --stars-color-text: #D7DCE0; }
+html[data-theme='light'] { --stars-color-text: #313133; }
+```
+
+**规范侧**（`foundation/tokens.md`）把这类 Token 写成**四列表**，亮色列插在取值之后：
+
+```
+| Token | 暗色值 | 亮色值 | 用途 |
+| :-- | :-- | :-- | :-- |
+| `--stars-color-text` | `#D7DCE0` | `#313133` | 正文文字 |
+```
+
+亮色列**不需要表头标记**——判别规则是「该行至少 3 个单元格、且第 2 格是色值」。
+只有两个主题**取值不同**的 Token 才需要第四列；两主题同值的仍写三列表，
+这时交付物的亮色块里**不必**再写一遍（写了也不算漂移，`[E2]` 允许两值相等）。
+
+**交付物侧**：`:root` 放暗色（主视角）取值，亮色差异放进 `[data-theme='light']` 块。
+`[E1]` 把主题块也认成定义块，所以亮色值**不会被误判成硬编码**。
+
+> ⚠ **`[E6]` 为什么必须有**：漏覆盖的 Token 在亮色下会**静默沿用暗色取值**——
+> 页面能切主题、能渲染，只是那几处颜色在亮色底上依然按暗色画，一半深一半浅。
+> 这类错不报错、不崩、截图粗看也像「设计如此」，只有逐 Token 对账才抓得住。
+> **`[E6]` 只对「自己声明过亮色块」的文件生效**，纯单主题交付物不受影响（向后兼容）。
+
+### check-tokens.js 的 [E4] 框架约定
+
+E1/E2/E3/E5 只管**取值对不对**，管不了**结构对不对**。E4 补的是后者，
+断言写在**本包的** `foundation/conventions.json` 里，校验器只提供通用断言类型：
+
+| 类型 | 作用 |
 | :-- | :-- |
-| E4-1 | 不得再引用 `tokens.md`「已移除 Token」表中的 Token（自动读表，新增移除项即生效） |
-| E4-2 | 有面包屑时 `.gf-content` 的 `padding-top` 必须为 0 |
-| E4-3 | `.gf-breadcrumb` 禁止 `background` / `height`（背景归 `.gf-content`，高度由内容流决定） |
-| E4-4 | 面包屑必须是 `<main class="gf-content">` 的**首子元素** |
-| E4-5 | `.gf-tabsbar__tab` 禁止 `min-width` / 固定 `width`（宽度由内容 + padding 决定） |
-| E4-6 | 必须存在 `.gf-layout--collapsed .gf-collapse-trigger … { rotate(180deg) }`（收起态箭头向右） |
-| E4-7 | `.gf-tabsbar` 必须 `position: relative` + `z-index`（否则下投影被后续兄弟元素盖住） |
-| E4-8 | `.gf-sider` 背景必须为 `var(--color-bg-card)`（浅色侧栏，深色变体已删） |
+| `forbid-removed-tokens` | 引用 `tokens.md`「已移除」表里的 Token 即报错 |
+| `forbid-property` | 匹配的规则块内禁止出现某属性 |
+| `require-property` | 匹配的规则块内必须声明某属性，且值匹配正则 |
+| `require-value` | 属性取值必须在白名单内（未声明则不判） |
+| `require-value-pattern` | 属性取值必须匹配正则（未声明则不判） |
+| `require-rule` | 必须存在「选择器 + 属性匹配正则」的规则 |
+| `require-first-child` | 指定子元素必须是容器的首个子元素 |
 
-只作用于含 `.gf-content` / `.gf-tabsbar` / `.gf-collapse-trigger` 的布局类文件，
-组件片段与独立页面自动跳过——每项都有「相关元素是否出现」的前置条件。
+每条都可加 `when` 前置条件（`hasClass` / `cssHas` / `htmlHas`），
+只在「相关元素确实存在」时才生效——这样组件片段与独立页面会自动跳过，不会误报。
 
-**为什么需要它**：v2.10.3 批量改造 6 份布局文件时，`demo-dashboard.html` 的
-`.gf-content` 把 background 写成 `--color-bg-card`（当时仪表盘走白底例外，v2.10.3 末已取消、统一为 `--color-bg-canvas`），
-整串精确匹配落空 → 它是唯一残留 `padding-top: 16px` 的文件，面包屑比其它页面低 16px。
-而 E1/E2/E3 全 0、校验器报绿，只能靠肉眼发现。
+`selector` 怎么匹配由 `match` 决定，三选一：
+
+| 值 | 含义 |
+| :-- | :-- |
+| `exact`（默认） | 选择器**整体等于**给定值 |
+| `contains` | 选择器里**出现**该类，带 `-` / `_` / 词边界（`.x-a` 不命中 `.x-a__b`） |
+| `all` | **不筛选择器**，样式表里每条规则都受检（`selector` 可省略） |
+
+`all` 是给**横切约定**用的——「间距一律走 Token」「圆角只允许 N 档」这类约束不针对某个组件，
+而针对整张表；靠 `contains` 逐个类名枚举，必然漏掉后来新增的组件。
+
+`conventions.json` 不存在或 `rules` 为空 → `[E4]` 恒为 0，不报错（新包尚未裁决约定）。
+写法与类型参考见 `../foundation/conventions.json` 内的 `_类型参考`，
+一份真实样例见工厂包 `assets/samples/conventions.sample.json`——**那是样例，不要照抄**。
+
+**为什么需要它**：批量改造多个布局文件时，靠肉眼审结构约定必然漏。
+例如「面包屑必须是内容区的首子元素」这类约定，漏一个文件就是该页面比别人低一截，
+而 E1/E2/E3 全 0、校验器报绿。
 **结论：框架约定不能只写在文档里——凡是「批量脚本可能漏掉某个文件」的约定，都应进校验器。**
 
 ### 关于 I1「未落地」
 
-I1 不是失败项，但**不应该被无视**——它通常指向三种真实问题，v2.6 已全部处理：
+I1 不是失败项，但**不应该被无视**——它通常指向三种真实问题：
 
 | 成因 | 表现 | 处理 |
 | :-- | :-- | :-- |
@@ -314,4 +411,4 @@ I1 不是失败项，但**不应该被无视**——它通常指向三种真实�
 | 规范虚胖 | 重复定义、照抄外部技能包、色板预留档位 | 在 `tokens.md` 用途列标注「预留 / 色板 / 废弃」并指向应替代的 Token |
 
 > **标注预留的写法**：在 `tokens.md` 用途列写「预留：……，请用 `--xxx`」。校验器识别后单列为「已标注预留」，不计入 I1。
-> 这样既保留溯源价值（如 Ant Design 对标档位），又明确了实现该用哪个 Token。
+> 这样既保留溯源价值（如对标档位），又明确了实现该用哪个 Token。

@@ -4,6 +4,7 @@
   <meta charset="UTF-8" data-page-node-id="aNZvNHP5OCoGlPniX3GcUq">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="s9BSSwgfoMt6oEGKFHrACa">
   <title>抽屉模板 - 广发中后台设计系统</title>
+  <!-- 样例：广发中后台系统的结构，只作参考，不要照抄。 -->
   <!--
     ============================================================
     模板：抽屉 Drawer（自定义固定顶部工作栏）
@@ -21,7 +22,7 @@
       --drawer-form-width    560px  单列垂直表单
 
     必做替换（搜索「业务替换点」）：
-      1. 标题文案 .gf-drawer__title
+      1. 标题文案 .gf-drawer__title（首个标题写成 @@页面标题@@，由 --name 填充）
       2. header 右侧按钮文案与回调（确定 / 取消）
       3. body 内容（描述列表 / 表单字段）
       4. 仅在移动端、强流程或明确要求时才加 footer
@@ -100,12 +101,11 @@
       background: var(--color-bg-canvas);
     }
 
-    /* ============================================================
-       演示用触发区（业务接入时删除）
-       ============================================================ */
+    /* @transient-start 演示用触发区（业务接入时删除）——生成器注入宿主页时会剔除本段 */
     .demo-launch { max-width: 800px; margin: 0 auto; }
     .demo-launch h1 { font-size: var(--font-size-body-lg); font-weight: 500; color: var(--color-text-heading); margin: 0 0 var(--space-4); }
     .demo-launch__row { display: flex; gap: var(--space-3); flex-wrap: wrap; }
+    /* @transient-end */
 
     /* ============================================================
        按钮（组件级，业务可直接复用）
@@ -276,14 +276,15 @@
 </head>
 <body data-page-node-id="cwI4NwrxrMrMuCQryCzLF4">
 
-  <!-- ===== 演示用触发区（业务接入时删除） ===== -->
-  <div class="demo-launch" data-page-node-id="jtJ2ZOW2wgyxgXaajPZoQL">
+  <!-- @transient-start 演示用触发区（业务接入时删除）——注入宿主页时剔除本段 -->
+  <div class="demo-launch" data-collect-ignore data-page-node-id="jtJ2ZOW2wgyxgXaajPZoQL">
     <h1 data-page-node-id="ToucxHRtTz0DLNe3um8Kto">抽屉模板 · 自定义固定工作栏</h1>
     <div class="demo-launch__row" data-page-node-id="ZCjfDCEjoCYvHmr1Feck4h">
       <button class="gf-btn gf-btn--secondary" data-drawer-open="drawerDetail" data-page-node-id="s34d2pQxHnsoI4CX9a8o65">详情抽屉 480</button>
       <button class="gf-btn" data-drawer-open="drawerForm" data-page-node-id="xCXEGVsHV7eDdt4U5axo3w">表单抽屉 560</button>
     </div>
   </div>
+  <!-- @transient-end -->
 
   <!-- ===== 详情抽屉 480px：只读预览，操作按钮在 header 右侧 ===== -->
   <div class="gf-drawer-mask" id="drawerDetail" data-page-node-id="jjpxkgMYN89wixoQaTgMBG">
@@ -296,7 +297,7 @@
             </svg>
           </button>
           <!-- 业务替换点：标题文案 -->
-          <h2 class="gf-drawer__title" id="titleDetail" data-page-node-id="mBDDAL1NnxCrCG0Fy1uSwD">产品备案详情</h2>
+          <h2 class="gf-drawer__title" id="titleDetail" data-page-node-id="mBDDAL1NnxCrCG0Fy1uSwD">@@页面标题@@</h2>
         </div>
         <!-- 业务替换点：右侧操作（展示类可只保留「关闭」或不放按钮） -->
         <div class="gf-drawer__header-side" data-page-node-id="cykwPidDANkhqYOXpF9hkO">

@@ -3,9 +3,23 @@
 <head data-page-node-id="GGTZ3r50dElogVv2tZ2ieI">
   <meta charset="UTF-8" data-page-node-id="IdB1ILB0TEX2HbsuBBChBH">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="Pp1X6aZonF5ks1OYgD4HXd">
-  <title>混合布局模板 - 广发中后台设计系统</title>
+  <title>布局样例（某系统的混合布局）— 只读参考</title>
   <!--
     ============================================================
+    【样例，不是模板，不要照抄】
+
+    这是**某一个系统**真实在用的布局（通栏顶栏 + 浅色侧边栏 + 卡片式多标签），
+    放在这里只为说明「一套完整布局长什么样、三个插入点标记怎么落位」。
+
+    它不属于引擎自带件，init-package.js 不会把它复制进新包。
+    搭新系统的布局时：
+      · 外壳结构照**本系统的设计稿 / 线上采集**来（见 mine-tokens.js 报告第 2 节）
+      · 起手用 scripts/layout/_skeleton.html，不要从这个文件改
+      · 本文件里的取值是那个系统的真实取值，抄过来就是「生搬硬套」
+
+    下列类名与 Token 名都是那个系统的（此处为 gf- 前缀），本系统应按自己的命名重建。
+    ============================================================
+    原文件头（保留供溯源）：
     模板：混合布局（MixedLayout）—— 顶部通栏一级导航 + 浅色侧边栏
     规范：components/layout.md §7.5 + navigation.md §1 / §6 / §12
     版本：design-specs v2.10.3

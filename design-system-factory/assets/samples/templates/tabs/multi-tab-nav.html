@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>多标签导航模板 - 广发中后台设计系统</title>
+  <!-- 样例：广发中后台系统的结构，只作参考，不要照抄。 -->
   <!--
     ============================================================
     模板：多标签导航（MultiTab，v2.10 卡片式）
@@ -45,8 +46,8 @@
       --radius-btn: 2px;
       --radius-card: 4px;
       --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 20px; --space-6: 24px;
-      --transition-fast: 0.2s;
-      --font-family: 'Microsoft YaHei', 'PingFang SC', 'SF Pro Display', -apple-system, 'Helvetica Neue', Arial, sans-serif;
+      --transition-fast: 200ms ease-in-out;
+      --font-family: 'Microsoft YaHei', 'PingFang SC', 'SF Pro Display', 'DIN Alternate', -apple-system, 'Helvetica Neue', Arial, sans-serif;
       --z-index-nav-popup: 1100;
     }
 
@@ -139,10 +140,11 @@
     }
     .gf-tabmenu__item:hover { background: var(--color-primary-light); color: var(--color-primary); }
 
-    /* 演示区 */
+    /* @transient-start 演示区样式（业务接入时删除）——注入宿主页时会剔除本段 */
     .gf-demo { background: var(--color-bg-card); border-radius: var(--radius-card); padding: var(--space-6); }
     .gf-demo__hint { font-size: 13px; color: var(--color-text-tertiary); margin-top: var(--space-4); line-height: 1.8; }
     .gf-demo__bar { margin-top: var(--space-4); display: flex; gap: var(--space-2); }
+    /* @transient-end */
     .gf-btn {
       display: inline-flex; align-items: center; justify-content: center;
       height: 32px; padding: 0 var(--space-4); font-size: 14px;
@@ -152,12 +154,13 @@
     .gf-btn:hover { filter: brightness(0.94); }
     .gf-btn--secondary { border: 1px solid var(--color-border); background: var(--color-bg-card); color: var(--color-text); }
     .gf-btn--secondary:hover { border-color: var(--color-primary); color: var(--color-primary); }
+    /* @transient-start 演示区样式（业务接入时删除） */
     .gf-demo__panel { padding: var(--space-6) 0; font-size: 13px; color: var(--color-text-secondary); }
+    /* @transient-end */
   </style>
 </head>
 <body>
-  <div class="gf-demo">
-    <!-- ============ 多标签导航 ============ -->
+    <!-- ============ 多标签导航（注入宿主页的正文部分） ============ -->
     <nav class="gf-tabsbar" aria-label="多标签导航">
       <button class="gf-tabsbar__arrow" id="tabArrowPrev" title="上一个标签" aria-label="向左切换标签">
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -221,22 +224,25 @@
       <button class="gf-tabmenu__item" data-action="closeAll">关闭全部</button>
     </div>
 
-    <div class="gf-demo__panel" id="activePanel">当前激活标签：首页</div>
+    <!-- @transient-start 演示区（业务接入时删除）——注入宿主页时会剔除本段 -->
+    <div class="gf-demo" data-collect-ignore>
+      <div class="gf-demo__panel" id="activePanel">当前激活标签：首页</div>
 
-    <div class="gf-demo__bar">
-      <button class="gf-btn" id="btnAddTab">新增标签</button>
-      <button class="gf-btn gf-btn--secondary" id="btnAddMany">批量新增 5 个（验证箭头）</button>
+      <div class="gf-demo__bar">
+        <button class="gf-btn" id="btnAddTab">新增标签</button>
+        <button class="gf-btn gf-btn--secondary" id="btnAddMany">批量新增 5 个（验证箭头）</button>
+      </div>
+
+      <p class="gf-demo__hint">
+        v2.10.3 更新：选中态由"下划线"改为"白色卡片"；页签宽度由内容决定，文字少时变窄。<br>
+        交互说明：<br>
+        · 点击标签切换激活态；点击 × 关闭（首页不可关闭，至少保留 1 个标签）<br>
+        · 标签总宽溢出时自动显示左右箭头，滚动条始终隐藏<br>
+        · 右键标签弹出菜单：刷新 / 关闭当前 / 关闭其他 / 关闭全部<br>
+        · 关闭激活标签后自动激活相邻标签（优先左侧）
+      </p>
     </div>
-
-    <p class="gf-demo__hint">
-      v2.10.3 更新：选中态由"下划线"改为"白色卡片"；页签宽度由内容决定，文字少时变窄。<br>
-      交互说明：<br>
-      · 点击标签切换激活态；点击 × 关闭（首页不可关闭，至少保留 1 个标签）<br>
-      · 标签总宽溢出时自动显示左右箭头，滚动条始终隐藏<br>
-      · 右键标签弹出菜单：刷新 / 关闭当前 / 关闭其他 / 关闭全部<br>
-      · 关闭激活标签后自动激活相邻标签（优先左侧）
-    </p>
-  </div>
+    <!-- @transient-end -->
 
   <script>
     (function () {

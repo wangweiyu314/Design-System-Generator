@@ -308,7 +308,7 @@ hook 里写的是安装时算出的相对路径。挪完重新 `install`。
 不装门禁，直接跑：
 
 ```bash
-node design-specs/scripts/check-tokens.js design-specs/examples/demo-form.html --strict
+node design-specs/scripts/check-tokens.js design-specs/examples/<刚生成的文件>.html --strict
 ```
 
 **Q：pre-commit.local 是什么，能删吗？**

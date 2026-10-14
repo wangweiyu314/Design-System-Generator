@@ -4,6 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>基础表单 - 新建客户</title>
+  <!--
+    ============================================================
+    模板：基础表单（垂直布局 + 字段宽度档 + 底部操作栏）
+    样例：广发中后台系统的结构，只作参考，不要照抄
+    取值一律走 Token；改取值先改 foundation/tokens.md，再回灌本文件 :root
+    ============================================================
+  -->
   <style>
     :root {
       --color-primary: #2A6CDD;
@@ -23,11 +30,11 @@
       --color-required: #F5222D; /* 等价于 --color-error，保留语义别名 */
       --radius-btn: 2px;
       --radius-card: 4px;
-      --shadow-card: 0 2px 8px rgba(0,0,0,0.10);
-      --shadow-dropdown: 0 6px 16px rgba(0,0,0,0.12);
+      --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.10);
+      --shadow-dropdown: 0 6px 16px rgba(0, 0, 0, 0.12);
       --space-1: 4px; --space-2: 8px; --space-3: 12px;
       --space-4: 16px; --space-5: 20px; --space-6: 24px;
-      --font-family: 'Microsoft YaHei', 'PingFang SC', 'SF Pro Display', 'DIN Alternate', sans-serif;
+      --font-family: 'Microsoft YaHei', 'PingFang SC', 'SF Pro Display', 'DIN Alternate', -apple-system, 'Helvetica Neue', Arial, sans-serif;
       --font-number: 'DIN Alternate', 'DIN', 'SF Pro Display', 'Helvetica Neue', sans-serif;
           --color-white: #FFFFFF;
     }
@@ -264,7 +271,7 @@
   </style>
 </head>
 <body>
-  <!-- 页面标题区 -->
+  <!-- 业务替换点：页面标题与返回入口 -->
   <div class="gf-page-header">
     <h1 class="gf-page-header__title">新建客户</h1>
     <button class="gf-link">
@@ -275,7 +282,7 @@
     </button>
   </div>
 
-  <!-- 表单卡 -->
+  <!-- 业务替换点：表单字段（标签 / 必填标记 / 校验规则 / 占位文案） -->
   <form class="gf-form-card">
     <!-- 客户名称 -->
     <div class="gf-form-item">
@@ -321,7 +328,7 @@
       <textarea class="gf-textarea" placeholder="请输入备注信息"></textarea>
     </div>
 
-    <!-- 底部按钮区 -->
+    <!-- 业务替换点：提交与取消逻辑 -->
     <div class="gf-form-actions">
       <button type="button" class="gf-btn-secondary">取消</button>
       <button type="submit" class="gf-btn">提交</button>

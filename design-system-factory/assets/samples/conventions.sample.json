@@ -1,0 +1,112 @@
+{
+  "_说明": [
+    "【样例，不是模板，不要照抄】",
+    "这是「广发中后台系统」自己的 9 条框架约定，放在工厂包里只作参考——",
+    "它的类名、它的结构假设都只对那一套系统成立。换一套系统必须重新裁决，",
+    "裁决结果写进那个包的 foundation/conventions.json。",
+    "校验器只提供通用断言类型，不认识任何具体系统的类名。"
+  ],
+  "_类型参考": {
+    "forbid-removed-tokens": "引用 tokens.md「已移除」表里的 Token 即报错。字段：无",
+    "forbid-property": "匹配的规则块内禁止出现某属性。字段：selector / match(exact|contains|all) / property(数组)",
+    "require-property": "匹配的规则块内必须声明某属性且值匹配正则。字段：selector / match / property(对象：属性→正则)",
+    "require-value": "属性取值必须在白名单内（未声明则不判）。字段：selector / match / property(数组) / allow(数组) / fallback(简写属性名)",
+    "require-value-pattern": "属性取值必须匹配正则（未声明则不判）。字段：selector / match / property(数组) / pattern(正则字符串) / allow(数组，可选，命中即放行) / fallback(简写属性名)",
+    "require-rule": "必须存在「选择器 + 属性匹配正则」的规则。字段：selector / property / matchValue(正则字符串)",
+    "require-first-child": "指定子元素必须是容器的首个子元素。字段：container(如 main.x-content) / child(如 nav.x-breadcrumb)",
+    "when": "前置条件，不满足则跳过该条：hasClass(HTML 中该类存在) / cssHas(样式表中该选择器存在) / htmlHas(HTML 中含该子串)"
+  },
+  "version": 1,
+  "rules": [
+    {
+      "id": "removed",
+      "type": "forbid-removed-tokens",
+      "reason": "删掉的 Token 被抄回来了"
+    },
+    {
+      "id": "content-padding-top",
+      "type": "require-value",
+      "selector": ".gf-content",
+      "match": "exact",
+      "property": ["padding-top"],
+      "fallback": "padding",
+      "allow": ["0", "0px", "0rem", "var(--space-0)"],
+      "when": { "hasClass": "gf-breadcrumb" },
+      "reason": "面包屑自带上下留白，内容区再补 padding-top 会让面包屑比其它页面低"
+    },
+    {
+      "id": "breadcrumb-no-bg-height",
+      "type": "forbid-property",
+      "selector": ".gf-breadcrumb",
+      "match": "contains",
+      "property": ["background", "background-color", "height", "min-height"],
+      "reason": "面包屑背景由内容区统一给出、高度由内容流决定"
+    },
+    {
+      "id": "breadcrumb-first-child",
+      "type": "require-first-child",
+      "container": "main.gf-content",
+      "child": "nav.gf-breadcrumb",
+      "when": { "hasClass": "gf-breadcrumb" },
+      "reason": "面包屑必须是内容区的首子元素"
+    },
+    {
+      "id": "tabsbar-tab-width",
+      "type": "forbid-property",
+      "selector": ".gf-tabsbar__tab",
+      "match": "contains",
+      "property": ["min-width"],
+      "reason": "页签宽度由内容 + padding 决定"
+    },
+    {
+      "id": "tabsbar-tab-width-fixed",
+      "type": "require-value",
+      "selector": ".gf-tabsbar__tab",
+      "match": "contains",
+      "property": ["width"],
+      "allow": ["auto", "100%", "max-content", "fit-content", "inherit"],
+      "reason": "页签禁止固定宽度"
+    },
+    {
+      "id": "collapse-arrow",
+      "type": "require-rule",
+      "selector": ".gf-layout--collapsed .gf-collapse-trigger",
+      "match": "contains",
+      "property": "transform",
+      "matchValue": "rotate\\(\\s*180deg",
+      "when": { "cssHas": ".gf-collapse-trigger" },
+      "reason": "收起态箭头必须向右"
+    },
+    {
+      "id": "tabsbar-stacking",
+      "type": "require-property",
+      "selector": ".gf-tabsbar",
+      "match": "exact",
+      "property": {
+        "position": "^(relative|absolute|sticky|fixed)$",
+        "z-index": ".*"
+      },
+      "reason": "多标签栏必须给出层叠上下文，否则下投影被后续兄弟元素盖住"
+    },
+    {
+      "id": "spacing-tokens",
+      "type": "require-value-pattern",
+      "selector": ".gf-card",
+      "match": "contains",
+      "property": ["padding", "margin"],
+      "pattern": "^var\\(--space-",
+      "allow": ["0", "0px", "auto"],
+      "reason": "间距一律走 Token，不得出现裸 px（0 / auto 是合法例外，写进 allow）"
+    },
+    {
+      "id": "sider-light",
+      "type": "require-value",
+      "selector": ".gf-sider",
+      "match": "exact",
+      "property": ["background"],
+      "fallback": "background-color",
+      "allow": ["var(--color-bg-card)"],
+      "reason": "侧栏走浅色，深色变体已废弃"
+    }
+  ]
+}

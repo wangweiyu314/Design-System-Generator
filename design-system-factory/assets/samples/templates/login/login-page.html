@@ -4,6 +4,7 @@
   <meta charset="UTF-8" data-page-node-id="5LxtUwgjAJf7HzBH4HHGIv">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="zGgVZtwHhMYit7Desc9umW">
   <title>登录页模板 - 广发中后台设计系统</title>
+  <!-- 样例：广发中后台系统的结构，只作参考，不要照抄。 -->
   <!--
     ============================================================
     模板：登录页（LoginPage）
@@ -18,6 +19,7 @@
 
     必做替换（搜索「业务替换点」）：
       1. <title> 与品牌区：.gf-login__brand-mark 字样、.gf-login__brand-name 系统名
+         （系统名写成 @@系统名@@，由 --system 填充）
       2. .gf-login__brand 内联 SVG 插图（必须手绘内联，禁止外链图片/图标库）
       3. .gf-login__title 标题文案、.gf-login__subtitle 副标题
       4. 提交逻辑：form submit 回调中的接口调用（现有为 setTimeout 模拟）
@@ -71,7 +73,7 @@
       /* ---- 圆角 / 阴影 / 间距 / 动效 ---- */
       --radius-btn: 2px;
       --radius-card: 4px;
-      --shadow-card: 0px 2px 8px rgba(0, 0, 0, 0.10);
+      --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.10);
       --shadow-medium: 0px 6px 16px rgba(0, 0, 0, 0.12);
       --space-1: 4px; --space-2: 8px; --space-3: 12px;
       --space-4: 16px; --space-6: 24px; --space-8: 32px;
@@ -224,7 +226,7 @@
         <!-- 业务替换点：品牌标识与系统名 -->
         <div class="gf-login__brand-logo" data-page-node-id="WhqBQpshOGNmLXhOJQHAbI">
           <div class="gf-login__brand-mark" data-page-node-id="usWnKAM3bujRsc3HBWGmCC">广</div>
-          <span class="gf-login__brand-name" data-page-node-id="QBvLExutAFA05gtGqsBcyV">广发中后台系统</span>
+          <span class="gf-login__brand-name" data-page-node-id="QBvLExutAFA05gtGqsBcyV">@@系统名@@</span>
         </div>
         <!-- 业务替换点：品牌插图（必须内联手绘 SVG，禁止外链图片或图标库） -->
         <svg width="300" height="180" viewBox="0 0 300 180" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="品牌插图" data-page-node-id="UXvJ3GS6UUOGXt0L9v0ezW">

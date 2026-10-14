@@ -4,6 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>描述列表 - 合同详情</title>
+  <!--
+    ============================================================
+    模板：基础描述列表（多列布局 + Tag 标签 + 长文本）
+    样例：广发中后台系统的结构，只作参考，不要照抄
+    取值一律走 Token；改取值先改 foundation/tokens.md，再回灌本文件 :root
+    ============================================================
+  -->
   <style>
     :root {
       --color-primary: #2A6CDD;
@@ -22,11 +29,11 @@
       --color-text-heading: #13161B;
       --radius-btn: 2px;
       --radius-card: 4px;
-      --shadow-card: 0 2px 8px rgba(0,0,0,0.10);
-      --shadow-dropdown: 0 6px 16px rgba(0,0,0,0.12);
+      --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.10);
+      --shadow-dropdown: 0 6px 16px rgba(0, 0, 0, 0.12);
       --space-1: 4px; --space-2: 8px; --space-3: 12px;
       --space-4: 16px; --space-5: 20px; --space-6: 24px;
-      --font-family: 'Microsoft YaHei', 'PingFang SC', 'SF Pro Display', 'DIN Alternate', sans-serif;
+      --font-family: 'Microsoft YaHei', 'PingFang SC', 'SF Pro Display', 'DIN Alternate', -apple-system, 'Helvetica Neue', Arial, sans-serif;
       --font-number: 'DIN Alternate', 'DIN', 'SF Pro Display', 'Helvetica Neue', sans-serif;
           --tag-blue-bg: #EAF0FC;
       --color-success-bg: #E6F6EB;
@@ -187,7 +194,7 @@
   </style>
 </head>
 <body>
-  <!-- 页面标题区 -->
+  <!-- 业务替换点：页面标题与操作入口 -->
   <div class="gf-page-header">
     <h1 class="gf-page-header__title">合同详情 - HT20240001</h1>
     <button class="gf-link">
@@ -199,7 +206,7 @@
     </button>
   </div>
 
-  <!-- 详情卡 -->
+  <!-- 业务替换点：字段与标签（长文本字段的占位写法见下方注释） -->
   <div class="gf-descriptions-card">
     <dl class="gf-descriptions">
       <div class="gf-descriptions__item">
@@ -245,7 +252,7 @@
         <dd class="gf-descriptions__value gf-descriptions__value--number">138-0000-0000</dd>
       </div>
 
-      <!-- 长文本字段：占满整行 -->
+      <!-- 长文本字段：占满整行（业务替换点同「字段与标签」，只是多了 --full 修饰） -->
       <div class="gf-descriptions__item gf-descriptions__item--full">
         <dt class="gf-descriptions__label">合同说明</dt>
         <dd class="gf-descriptions__value">
